@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/white"
+    android:orientation="vertical"
+    app:cardCornerRadius="20dp"
+    android:padding="15dp">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:orientation="vertical">
+    <TextView
+        android:id="@+id/tvTenSP"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="ADD Distributor"
+        android:textStyle="bold"
+        android:fontFamily="sans-serif-black"
+        android:background="@drawable/custom_addtv_form_topleft_topright"
+        android:textAllCaps="true"
+        android:padding="8dp"
+        android:textColor="@color/dark_blue"
+        android:textSize="30sp"
+        android:layout_marginBottom="35dp"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:orientation="vertical">
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="40dp"
+        app:boxStrokeColor="@color/orange"
+        app:hintTextColor="@color/orange">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/edtName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text"
+            android:maxLines="1"
+            android:hint="Name Distributor" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/dialogAdd"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/white"
+        android:background="@drawable/resource_background_button"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:textSize="20sp"
+        android:text="Add" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/dialogBack"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/white"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="50dp"
+        android:textSize="20sp"
+        android:background="@drawable/resource_backgroundbutton_dart"
+        android:text="Back" />
+    </LinearLayout>
+    </LinearLayout>
+</androidx.cardview.widget.CardView>
