@@ -20,7 +20,7 @@ import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface ApiServices {
-    public static String BASE_URL="http://192.168.1.7:3000/api/";
+    public static String BASE_URL="http://192.168.1.12:3000/api/";
 
     @GET("get-list-distributor")
     Call<Response<List<Distributor>>> getListDistributor();
