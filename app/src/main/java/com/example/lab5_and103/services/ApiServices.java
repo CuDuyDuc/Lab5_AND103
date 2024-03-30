@@ -2,15 +2,20 @@ package com.example.lab5_and103.services;
 
 import com.example.lab5_and103.model.Distributor;
 import com.example.lab5_and103.model.Response;
+import com.example.lab5_and103.model.User;
 
 import java.util.List;
 
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
+import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
+import retrofit2.http.Part;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
@@ -30,4 +35,13 @@ public interface ApiServices {
     Call<Response<Distributor>> addDistributor(@Body Distributor distributor);
     @PUT("update-distributors/{id}")
     Call<Response<Distributor>> getUpdateDistributor(@Path("id") String id, @Body Distributor distributor);
+    @Multipart
+    @POST("register-send-email")
+    Call<Response<User>> register(@Part("username") RequestBody username,
+                                  @Part("password") RequestBody password,
+                                  @Part("email") RequestBody email,
+                                  @Part("name") RequestBody name,
+                                  @Part MultipartBody.Part avatar);
+    @POST("login")
+    Call<Response<User>> login(@Body User user);
 }
