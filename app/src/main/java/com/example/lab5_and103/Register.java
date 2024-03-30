@@ -9,6 +9,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -94,30 +95,32 @@ public class Register extends AppCompatActivity {
     };
     // Hàm chọn hình
     private void chooseImage() {
-        if(ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+        if(ContextCompat.checkSelfPermission(this, android.Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
             Intent intent = new Intent();
             intent.setType("image/*");
             intent.setAction(Intent.ACTION_GET_CONTENT);
             getImage.launch(intent);
         } else {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
+            ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
         }
     }
 
     ActivityResultLauncher<Intent> getImage = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
         @Override
         public void onActivityResult(ActivityResult result) {
-            Intent data = result.getData();
-            Uri imagePath = data.getData();
-            file = createFileFromUri(imagePath, "avatar");
-            Glide.with(Register.this).load(file)
-                                            .thumbnail(Glide.with(Register.this)
-                                            .load(R.mipmap.loading))
-                                            .centerCrop()
-                                            .circleCrop()
-                                            .diskCacheStrategy(DiskCacheStrategy.NONE)
-                                            .skipMemoryCache(true)
-                                            .into(imgAvatar);
+            if(result.getResultCode() == Activity.RESULT_OK) {
+                Intent data = result.getData();
+                Uri imagePath = data.getData();
+                file = createFileFromUri(imagePath, "avatar");
+                Glide.with(Register.this).load(file)
+                        .thumbnail(Glide.with(Register.this)
+                        .load(R.drawable.avatar))
+                        .centerCrop()
+                        .circleCrop()
+                        .diskCacheStrategy(DiskCacheStrategy.NONE)
+                        .skipMemoryCache(true)
+                        .into(imgAvatar);
+            }
         }
     });
 
