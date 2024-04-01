@@ -63,18 +63,21 @@ public class Register extends AppCompatActivity {
         btn_Register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                RequestBody _username = RequestBody.create(MediaType.parse("multipart/form-data"), edtUserName.getText().toString());
-                RequestBody _password = RequestBody.create(MediaType.parse("multipart/form-data"), edtPassword.getText().toString());
-                RequestBody _email = RequestBody.create(MediaType.parse("multipart/form-data"), edtEmail.getText().toString());
-                RequestBody _name = RequestBody.create(MediaType.parse("multipart/form-data"), edtName.getText().toString());
-                MultipartBody.Part multiparBody;
-                if(file != null) {
+                Toast.makeText(Register.this, "click", Toast.LENGTH_SHORT).show();
+                // sử dụng RequestBody
+                RequestBody _username = RequestBody.create(MediaType.parse("multipart/form-data"), edtUserName.getText().toString().trim());
+                RequestBody _password = RequestBody.create(MediaType.parse("multipart/form-data"), edtPassword.getText().toString().trim());
+                RequestBody _email = RequestBody.create(MediaType.parse("multipart/form-data"), edtEmail.getText().toString().trim());
+                RequestBody _name = RequestBody.create(MediaType.parse("multipart/form-data"), edtName.getText().toString().trim());
+                MultipartBody.Part multipartBody;
+                if (file != null) {
                     RequestBody requestFile = RequestBody.create(MediaType.parse("image/*"), file);
-                    multiparBody = MultipartBody.Part.createFormData("avatar", file.getName(), requestFile);
+                    multipartBody = MultipartBody.Part.createFormData("avatar", file.getName(), requestFile);
+                    // avatar là cùng tên với key trong multipart
                 } else {
-                    multiparBody = null;
+                    multipartBody = null;
                 }
-                httpRequest.callAPI().register(_username, _password, _email, _name, multiparBody).enqueue(responseUser);
+                httpRequest.callAPI().register(_username, _password, _email, _name, multipartBody).enqueue(responseUser);
             }
         });
 
@@ -86,64 +89,52 @@ public class Register extends AppCompatActivity {
         });
     }
 
-    Callback<Response<User>> responseUser = new Callback<Response<User>>() {
-        @Override
-        public void onResponse(Call<Response<User>> call, retrofit2.Response<Response<User>> response) {
-            if(response.isSuccessful()) {
-                if(response.body().getStatus() == 200) {
-                    Toast.makeText(Register.this, "Đăng ký thành công", Toast.LENGTH_SHORT).show();
-                }
-            }
-        }
-
-        @Override
-        public void onFailure(Call<Response<User>> call, Throwable t) {
-            Log.d(">>> GetListDistributor", "onFailure: "+ t.getMessage());
-        }
-    };
-    // Hàm chọn hình
     private void chooseImage() {
-        if(ContextCompat.checkSelfPermission(this, android.Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
             Intent intent = new Intent();
             intent.setType("image/*");
             intent.setAction(Intent.ACTION_GET_CONTENT);
             getImage.launch(intent);
         } else {
-            ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
         }
     }
 
     ActivityResultLauncher<Intent> getImage = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
         @Override
         public void onActivityResult(ActivityResult result) {
-            if(result.getResultCode() == Activity.RESULT_OK) {
+            if (result.getResultCode() == Activity.RESULT_OK) {
+                // there are no request codes
                 Intent data = result.getData();
                 Uri imagePath = data.getData();
-                file = createFileFromUri(imagePath, "avatar");
-                Glide.with(Register.this).load(file)
-                        .thumbnail(Glide.with(Register.this)
-                        .load(R.drawable.avatar))
-                        .centerCrop()
-                        .circleCrop()
-                        .diskCacheStrategy(DiskCacheStrategy.NONE)
+                // file avatar bien global
+                file = createFileFromUri(imagePath, "avarta");
+                // glide de load hinh
+                Glide.with(Register.this)
+                        .load(file) // load file hinh
+                        .thumbnail(Glide.with(Register.this).load(R.drawable.loading))
+                        .centerCrop() // center cắt ảnh
+                        .circleCrop() // bo tròn ảnh
+                        .diskCacheStrategy(DiskCacheStrategy.NONE) // clear cache
                         .skipMemoryCache(true)
                         .into(imgAvatar);
             }
         }
     });
 
-    private File createFileFromUri (Uri path, String name) {
-        File _file = new File(Register.this.getCacheDir(), name+".png");
+    // hàm tạo file hình từ Uri
+    private File createFileFromUri(Uri path, String name) {
+        File _file = new File(Register.this.getCacheDir(), name + ".png");
         try {
             InputStream in = Register.this.getContentResolver().openInputStream(path);
             OutputStream out = new FileOutputStream(_file);
             byte[] buf = new byte[1024];
             int len;
-            while((len = in.read(buf))>0) {
+            while ((len = in.read(buf)) > 0) {
                 out.write(buf, 0, len);
             }
-            out.close();
             in.close();
+            out.close();
             return _file;
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -152,6 +143,24 @@ public class Register extends AppCompatActivity {
         }
         return null;
     }
+
+    Callback<Response<User>> responseUser = new Callback<Response<User>>() {
+        @Override
+        public void onResponse(Call<Response<User>> call, retrofit2.Response<Response<User>> response) {
+            if (response.isSuccessful()){
+                // check status code
+                if (response.body().getStatus() == 200){
+                    Toast.makeText(Register.this, "Đăng ký thành công", Toast.LENGTH_SHORT).show();
+                    startActivity(new Intent(Register.this, Login.class));
+                }
+            }
+        }
+        @Override
+        public void onFailure(Call<Response<User>> call, Throwable t) {
+            Log.d(">>> GetListDistributor", "onFailure" + t.getMessage());
+        }
+    };
+
     public void Mapping() {
         edtUserName = findViewById(R.id.edtUserName);
         edtPassword = findViewById(R.id.edtPassword);

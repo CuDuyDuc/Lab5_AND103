@@ -1,9 +1,11 @@
 package com.example.lab5_and103.services;
 
 import com.example.lab5_and103.model.Distributor;
+import com.example.lab5_and103.model.Fruit;
 import com.example.lab5_and103.model.Response;
 import com.example.lab5_and103.model.User;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import okhttp3.MultipartBody;
@@ -12,6 +14,7 @@ import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
+import retrofit2.http.Header;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
@@ -44,4 +47,6 @@ public interface ApiServices {
                                   @Part MultipartBody.Part avatar);
     @POST("login")
     Call<Response<User>> login(@Body User user);
+    @GET("get-list-fruit")
+    Call<Response<ArrayList<Fruit>>> getListFruit(@Header("Authorization") String token);
 }

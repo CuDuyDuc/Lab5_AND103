@@ -29,13 +29,13 @@ public class DistributorsRecyclerView extends RecyclerView.Adapter<DistributorsR
     private List<Distributor> distributors;
     private Context context;
     private HttpRequest request;
-    private Callback responeCallBack;
+    private Callback responseCallBack;
 
-    public DistributorsRecyclerView(List<Distributor> distributors, Context context, HttpRequest request, Callback responeCallBack) {
+    public DistributorsRecyclerView(List<Distributor> distributors, Context context, HttpRequest request, Callback responseCallBack) {
         this.distributors = distributors;
         this.context = context;
         this.request = request;
-        this.responeCallBack = responeCallBack;
+        this.responseCallBack = responseCallBack;
     }
 
     @NonNull
@@ -59,7 +59,7 @@ public class DistributorsRecyclerView extends RecyclerView.Adapter<DistributorsR
                 public void onClick(DialogInterface dialog, int which) {
                     request.callAPI()
                             .getDeleteDistributor(distributor.getId())
-                            .enqueue(responeCallBack);
+                            .enqueue(responseCallBack);
 
 
                 }
@@ -100,7 +100,7 @@ public class DistributorsRecyclerView extends RecyclerView.Adapter<DistributorsR
                     dataDistributor.setName(edtNameDistributor.getText().toString().trim());
                     request.callAPI()
                             .getUpdateDistributor(distributor.getId(),dataDistributor)
-                            .enqueue(responeCallBack);
+                            .enqueue(responseCallBack);
                     alertDialog.dismiss();
                 }else {
                     Toast.makeText(context, "Không được để trống", Toast.LENGTH_SHORT).show();
