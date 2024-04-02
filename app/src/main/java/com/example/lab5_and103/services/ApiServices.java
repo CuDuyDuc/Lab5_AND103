@@ -5,8 +5,10 @@ import com.example.lab5_and103.model.Fruit;
 import com.example.lab5_and103.model.Response;
 import com.example.lab5_and103.model.User;
 
+import java.lang.ref.Reference;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -19,11 +21,12 @@ import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Part;
+import retrofit2.http.PartMap;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface ApiServices {
-    public static String BASE_URL="http://192.168.1.12:3000/api/";
+    public static String BASE_URL="http://192.168.1.3:3000/api/";
 
     @GET("get-list-distributor")
     Call<Response<List<Distributor>>> getListDistributor();
@@ -49,4 +52,8 @@ public interface ApiServices {
     Call<Response<User>> login(@Body User user);
     @GET("get-list-fruit")
     Call<Response<ArrayList<Fruit>>> getListFruit(@Header("Authorization") String token);
+
+    @Multipart
+    @POST("add-fruit-with-file-image")
+    Call<Response<Fruit>> addFruitWithImage(@PartMap Map<String,RequestBody> requestBodyMap, @Part ArrayList<MultipartBody.Part> lsImage);
 }
