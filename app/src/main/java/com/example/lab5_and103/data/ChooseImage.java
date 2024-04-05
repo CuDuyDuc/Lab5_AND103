@@ -50,8 +50,8 @@ public class ChooseImage {
     public void chooseImages(ActivityResultLauncher<Intent> getImage){
         Intent intent = new Intent();
         intent.setType("image/*");
-        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true); // Allow multiple selections
         intent.setAction(Intent.ACTION_PICK);
+        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true); // Allow multiple selections
         getImage.launch(intent);
     }
 }

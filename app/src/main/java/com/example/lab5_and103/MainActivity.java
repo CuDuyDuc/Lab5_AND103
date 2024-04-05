@@ -116,7 +116,7 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void onFailure(Call<Response<List<Distributor>>> call, Throwable t) {
-            Log.d("phuocdz",""+t.getMessage());
+            Log.d("duc143",""+t.getMessage());
         }
     };
     Callback<Response<Distributor>> responseCallback = new Callback<Response<Distributor>>() {
@@ -134,7 +134,7 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void onFailure(Call<Response<Distributor>> call, Throwable t) {
-            Log.d("phuocdz", "onFailure: "+t.getMessage());
+            Log.d("duc143", "onFailure: "+t.getMessage());
         }
     };
 }

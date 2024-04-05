@@ -9,13 +9,13 @@ public class Fruit {
     private ArrayList<String> image;
     private String description;
     @SerializedName("id_distributor")
-    private String distributor;
+    private Distributor distributor;
     private String createdAt, updatedAt;
 
     public Fruit() {
     }
 
-    public Fruit(String _id, String name, String quantity, String price, String status, ArrayList<String> image, String description, String distributor, String createdAt, String updatedAt) {
+    public Fruit(String _id, String name, String quantity, String price, String status, ArrayList<String> image, String description, Distributor distributor, String createdAt, String updatedAt) {
         this._id = _id;
         this.name = name;
         this.quantity = quantity;
@@ -84,11 +84,11 @@ public class Fruit {
         this.description = description;
     }
 
-    public String getDistributor() {
+    public Distributor getDistributor() {
         return distributor;
     }
 
-    public void setDistributor(String distributor) {
+    public void setDistributor(Distributor distributor) {
         this.distributor = distributor;
     }
 

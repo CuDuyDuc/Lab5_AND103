@@ -61,7 +61,7 @@ public class Login extends AppCompatActivity {
                     editor.putString("refreshToken", response.body().getRefreshToken());
                     editor.putString("id", response.body().getData().get_id());
                     editor.apply();
-                    startActivity(new Intent(Login.this, Home.class));
+                    startActivity(new Intent(Login.this, Fruits.class));
                 }
             }
         }

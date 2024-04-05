@@ -2,6 +2,7 @@ package com.example.lab5_and103.services;
 
 import com.example.lab5_and103.model.Distributor;
 import com.example.lab5_and103.model.Fruit;
+import com.example.lab5_and103.model.Page;
 import com.example.lab5_and103.model.Response;
 import com.example.lab5_and103.model.User;
 
@@ -24,9 +25,11 @@ import retrofit2.http.Part;
 import retrofit2.http.PartMap;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
+import retrofit2.http.QueryMap;
 
 public interface ApiServices {
-    public static String BASE_URL="http://192.168.1.3:3000/api/";
+    public static String IP ="172.16.53.169";
+    public static String BASE_URL="http://"+IP+":3000/api/";
 
     @GET("get-list-distributor")
     Call<Response<List<Distributor>>> getListDistributor();
@@ -56,4 +59,20 @@ public interface ApiServices {
     @Multipart
     @POST("add-fruit-with-file-image")
     Call<Response<Fruit>> addFruitWithImage(@PartMap Map<String,RequestBody> requestBodyMap, @Part ArrayList<MultipartBody.Part> lsImage);
+
+    @GET("get-page-fruit")
+    Call<Response<Page<ArrayList<Fruit>>>> getPageFruit(@QueryMap Map<String, String> stringMap);
+
+    @Multipart
+    @PUT("update-fruit-by-id/{id}")
+    Call<Response<Fruit>> updateFruitWithFileImage(@PartMap Map<String, RequestBody> requestBodyMap,
+                                                   @Path("id") String id,
+                                                   @Part ArrayList<MultipartBody.Part> ds_hinh
+    );
+
+    @DELETE("destroy-fruit-by-id/{id}")
+    Call<Response<Fruit>> deleteFruits(@Path("id") String id);
+
+    @GET("get-fruit-by-id/{id}")
+    Call<Response<Fruit>> getFruitById (@Path("id") String id);
 }

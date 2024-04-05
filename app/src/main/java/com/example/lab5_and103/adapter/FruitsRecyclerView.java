@@ -1,5 +1,7 @@
 package com.example.lab5_and103.adapter;
 
+import static com.example.lab5_and103.services.ApiServices.IP;
+
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -7,10 +9,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.lab5_and103.R;
 import com.example.lab5_and103.data.ChooseImage;
 import com.example.lab5_and103.model.Distributor;
@@ -23,16 +27,19 @@ import java.util.List;
 public class FruitsRecyclerView extends RecyclerView.Adapter<FruitsRecyclerView.FruitsHolder> {
     private ArrayList<Fruit> listFruits;
     private Context context;
-    private HttpRequest request;
-    private List<Distributor> distributorsList;
-    private ChooseImage chooseImage;
+    private  FruitClick fruitClick;
 
-    public FruitsRecyclerView(ArrayList<Fruit> listFruits, Context context, HttpRequest request, List<Distributor> distributorsList, ChooseImage chooseImage) {
+
+    public FruitsRecyclerView(ArrayList<Fruit> listFruits, Context context, FruitClick fruitClick) {
         this.listFruits = listFruits;
         this.context = context;
-        this.request = request;
-        this.distributorsList = distributorsList;
-        this.chooseImage = chooseImage;
+        this.fruitClick = fruitClick;
+    }
+
+    public interface FruitClick {
+        void delete(Fruit fruit);
+        void edit(Fruit fruit);
+
     }
 
     @NonNull
@@ -50,21 +57,23 @@ public class FruitsRecyclerView extends RecyclerView.Adapter<FruitsRecyclerView.
         holder.tvName.setText(fruit.getName());
         holder.tvPrice.setText(fruit.getPrice());
         Log.d("fafafa", "onBindViewHolder: "+fruit.getImage());
-//        if(fruit.getImageList().size()>0){
-//            File image = new File(fruit.getImageList().get(0));
-//            Glide.with(context)
-//                    .load(image)
-//                    .thumbnail(Glide.with(context).load(R.mipmap.loading))
-//                    .into(holder.imageFruit);
-//        }
-
-        if(distributorsList.size()>0){
-            for (int i = 0; i < distributorsList.size(); i++) {
-                if(fruit.getDistributor().equals(distributorsList.get(i).getId())){
-                    holder.tvDistributor.setText(distributorsList.get(i).getName());
-                }
-            }
+        if (!fruit.getImage().isEmpty()) {
+            String url = fruit.getImage().get(0);
+            String newUrl = url.replace("localhost", IP);
+            Glide.with(context)
+                    .load(newUrl)
+                    .thumbnail(Glide.with(context).load(R.drawable.loading))
+                    .into(holder.imageFruit);
         }
+
+        Distributor distributor = fruit.getDistributor();
+        holder.tvDistributor.setText(distributor.getName());
+        holder.btnDel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                fruitClick.delete(fruit);
+            }
+        });
 
     }
 
@@ -76,13 +85,14 @@ public class FruitsRecyclerView extends RecyclerView.Adapter<FruitsRecyclerView.
     public class FruitsHolder extends RecyclerView.ViewHolder{
 
         private TextView tvName,tvDistributor,tvPrice;
-        private ImageView imageFruit, btnAddCart;
+        private ImageView imageFruit, btnEdit, btnDel;
         public FruitsHolder(@NonNull View itemView) {
             super(itemView);
             tvName = itemView.findViewById(R.id.tvTenSP);
             tvDistributor = itemView.findViewById(R.id.tvDistributor);
             tvPrice = itemView.findViewById(R.id.tvPrice);
-            btnAddCart = itemView.findViewById(R.id.btnAddCart);
+            btnEdit = itemView.findViewById(R.id.btnEdit);
+            btnDel = itemView.findViewById(R.id.btnDel);
             imageFruit = itemView.findViewById(R.id.imageSP);
         }
     }
